@@ -81,7 +81,7 @@ const ImageOverActions = ({  }) => {
                                     onClick={() => {
                                         setIsActionsKebabOpen(false);
                                     }}>
-                          {_("Settings")}
+                          {"Settings"}
                       </DropdownItem>,
                       <DropdownItem key="prune-unused-images"
                                     id="prune-unused-images-button"
@@ -90,7 +90,7 @@ const ImageOverActions = ({  }) => {
                                     onClick={() => {
                                         setIsActionsKebabOpen(false);
                                     }}>
-                          {_("Add torrent")}
+                          {"Add torrent"}
                       </DropdownItem>,
                   ]} />
     );

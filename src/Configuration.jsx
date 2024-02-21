@@ -16,7 +16,7 @@ const Configuration = ({ }) => {
     return (
         <>
         <Form isHorizontal>
-            <FormGroup fieldId="rename-dialog-container-name" label={_("New container name")}>
+            <FormGroup fieldId="rename-dialog-container-name" label={"New container name"}>
                 <TextInput
                         value={state.config.host}
                         placeholder='localhost'
@@ -39,7 +39,7 @@ const Configuration = ({ }) => {
             </FormGroup>
         </Form>
         <Button variant="primary" onClick={handleUpdate}>
-            {_("Update")}
+            {"Update"}
         </Button>
         </>
     );
