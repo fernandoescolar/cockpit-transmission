@@ -1,16 +1,17 @@
 import cockpit from "cockpit";
 
 const SessionHeader = 'X-Transmission-Session-Id';
-const rpcPath = '/transmission/rpc'
+const rpcPath = '/transmission/rpc';
 let http = undefined;
 
 export function init(host, port, username, password) {
+    const auth = btoa(`${username}:${password}`);
     http = cockpit.http({
         "address": host,
         "headers": {
-            "Authorization": `Basic ${btoa(`${username}:${password}`)}`,
+            "Authorization": `Basic ${auth}`,
         },
-        "port": port
+        "port": parseInt(port)
     });
 }
 
@@ -36,11 +37,11 @@ function rpcCall(method, args) {
             arguments: args,
             method,
         };
-        this.getToken()
+        getToken()
             .then(token => {
                 http.post(rpcPath, data, { [SessionHeader]: token })
                     .then(response => {
-                        resolve(response);
+                        resolve(JSON.parse(response));
                     })
                     .catch(error => {
                         reject(error);

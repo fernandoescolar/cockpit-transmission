@@ -22,7 +22,7 @@ import "patternfly/patternfly-5-cockpit.scss";
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Application } from './app.jsx';
+import Application from './app.jsx';
 import './app.scss';
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -1,24 +1,5 @@
-/*
- * This file is part of Cockpit.
- *
- * Copyright (C) 2017 Red Hat, Inc.
- *
- * Cockpit is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * Cockpit is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
- */
-
 import cockpit from 'cockpit';
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert } from "@patternfly/react-core/dist/esm/components/Alert/index.js";
 import { Button } from "@patternfly/react-core/dist/esm/components/Button";
 import { Card, CardBody, CardFooter, CardHeader, CardTitle } from "@patternfly/react-core/dist/esm/components/Card";
@@ -26,7 +7,7 @@ import { Dropdown, DropdownItem, KebabToggle } from '@patternfly/react-core/dist
 import { Flex, FlexItem } from "@patternfly/react-core/dist/esm/layouts/Flex";
 import { ExpandableSection } from "@patternfly/react-core/dist/esm/components/ExpandableSection";
 import { Text, TextVariants } from "@patternfly/react-core/dist/esm/components/Text";
-
+import { useTransmissionContext } from './context';
 
 const Downloads = ({ }) => {
     const state = useTransmissionContext();
@@ -65,7 +46,6 @@ const Downloads = ({ }) => {
         </Card>
     );
 };
-
 
 const ImageOverActions = ({  }) => {
     const [isActionsKebabOpen, setIsActionsKebabOpen] = useState(false);

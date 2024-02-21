@@ -1,24 +1,5 @@
-/*
- * This file is part of Cockpit.
- *
- * Copyright (C) 2017 Red Hat, Inc.
- *
- * Cockpit is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * Cockpit is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
- */
-
 import cockpit from 'cockpit';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Page, PageSection, PageSectionVariants } from "@patternfly/react-core/dist/esm/components/Page";
 import { Alert, AlertActionCloseButton, AlertActionLink, AlertGroup } from "@patternfly/react-core/dist/esm/components/Alert";
 import { Button } from "@patternfly/react-core/dist/esm/components/Button";
@@ -31,61 +12,73 @@ import * as transmission from './client';
 import Downloads from './Downloads';
 import Configuration from './Configuration';
 
-const _ = cockpit.gettext;
-
-export class Application extends React.Component {
-    constructor() {
-        super();
-        this.reloadInterval = undefined;
-        this.state = {
-            torrents: [],
-            hasBeenInitialized: false,
-            config: {
-                host: '',
-                port: '',
-                username: '',
-                password: '',
-            },
-        };
-
-        cockpit.file('~/.cockpit-transmission').watch(content => {
-            if (!content) {
-                return;
-            }
-
-            var config = JSON.parse(content);
-            if (config.host === '' || config.port === '' || config.username === '' || config.password === '') {
-                return;
-            }
-
-            transmission.init(config.host, config.port, config.username, config.password);
-            this.setState({  torrents: [], hasBeenInitialized: true, config: config});
-            if (this.reloadInterval) {
-                clearInterval(this.reloadInterval);
-            }
-
-            this.reloadInterval = setInterval(() => {
-                transmission.getTorrents().then(response => {
-                    this.setState({ ...this.state, torrents: response.arguments.torrents });
-                });
-            }, 10000);
+const Application = () => {
+    const [reloadInterval, setReloadInterval] = useState(undefined);
+    const [state, setState] = useState({ torrents: [], hasBeenInitialized: false, config: { host: '', port: '', username: '', password: ''} });
+    const syntax = {
+        parse: (data) => JSON.parse(data),
+        stringify: (data) => JSON.stringify(data, null, 2),
+    };
+    const file = cockpit.file('/usr/share/cockpit/.cockpit-transmission', { syntax, superuser: true });
+    const reload = () => {
+        transmission.getTorrents().then(response => {
+            setState({ ...state, torrents: response.arguments.torrents, hasBeenInitialized: true });
+        }).catch(err => {
+            console.log(err);
+            setState({ ...state, torrents: [], hasBeenInitialized: false });
         });
-    }
+    };
+    const readConfiguration = (config) => {
+        if (!config) {
+            return;
+        }
 
-    render() {
-        return (
-            <WithTransmissionContext value={this.state}>
-                <Page id="transmission" key="transmission">
-                    <PageSection className="content-filter" padding={{ default: 'noPadding' }} variant={PageSectionVariants.light}>
-                    </PageSection>
-                    <PageSection className='ct-pagesection-mobile'>
-                        <Stack hasGutter>
-                            { this.state.hasBeenInitialized ? (<Downloads />) : (<Configuration />) }
-                        </Stack>
-                    </PageSection>
-                </Page>
-            </WithTransmissionContext>
-        );
-    }
-}
+        if (!config.host || !config.port || !config.username || !config.password) {
+            return;
+        }
 
+        transmission.init(config.host, config.port, config.username, config.password);
+        setState({ torrents: [], hasBeenInitialized: true, config });
+        if (reloadInterval) {
+            clearInterval(reloadInterval);
+        }
+        if (reloadInterval) {
+            clearInterval(reloadInterval);
+        }
+
+        reload();
+        setReloadInterval(setInterval(() => {
+            reload();
+        }, 10000));
+    };
+
+    useEffect(() => {
+        file.watch(content => {
+            console.log("File changed");
+            console.log(content);
+            readConfiguration(content);
+        });
+    }, []);
+
+    const handleUpdate = ({ host, port, username, password }) => {
+        console.log("Update");
+        setState({ ...state, config: { host, port, username, password } });
+        file.replace(state.config).done(() => { console.log("Done") }).fail(err => { console.log(err) });
+    };
+
+    return (
+        <WithTransmissionContext value={state}>
+            <Page id="transmission" key="transmission">
+                <PageSection className="content-filter" padding={{ default: 'noPadding' }} variant={PageSectionVariants.light}>
+                </PageSection>
+                <PageSection className='ct-pagesection-mobile'>
+                    <Stack hasGutter>
+                        { state.hasBeenInitialized ? (<Downloads />) : (<Configuration handleUpdate={handleUpdate} />) }
+                    </Stack>
+                </PageSection>
+            </Page>
+        </WithTransmissionContext>
+    );
+};
+
+export default Application;
