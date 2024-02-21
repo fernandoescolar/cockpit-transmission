@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="addon">
-  <id>org.cockpit_transmission</id>
+  <id>org.cockpit-project.cockpit-transmission</id>
   <metadata_license>CC0-1.0</metadata_license>
   <name>Trasmission</name>
   <summary>Trasmission cockpit module</summary>
@@ -9,7 +9,7 @@
       Trasmission cockpit module.
     </p>
   </description>
-  <extends>org.cockpit_transmission</extends>
+  <extends>org.cockpit-project.cockpit-transmission</extends>
   <launchable type="cockpit-manifest">cockpit-transmission</launchable>
   <url type="homepage">https://github.com/fernandoescolar/cockpit-transmission</url>
   <url type="bugtracker">https://github.com/fernandoescolar/cockpit-transmission/issues</url>
