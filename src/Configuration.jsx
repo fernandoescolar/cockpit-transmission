@@ -18,21 +18,21 @@ const Configuration = ({ }) => {
         <Form isHorizontal>
             <FormGroup fieldId="rename-dialog-container-name" label={"New container name"}>
                 <TextInput
-                        value={state.config.host}
+                        value={state.host}
                         placeholder='localhost'
                         type="text"
                         onChange={(_, value) => setState({...state, host: value })} />
                 <TextInput
-                        value={state.config.port}
+                        value={state.port}
                         placeholder='9091'
                         type="text"
                         onChange={(_, value) => setState({...state, port: value })} />
                 <TextInput
-                        value={state.config.username}
+                        value={state.username}
                         type="text"
                         onChange={(_, value) => setState({ ...state, username: value })} />
                 <TextInput
-                        value={state.config.password}
+                        value={state.password}
                         placeholder='localhost'
                         type="password"
                         onChange={(_, value) => setState({...state, password: value })} />
