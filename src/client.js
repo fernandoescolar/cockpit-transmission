@@ -56,21 +56,33 @@ function rpcCall(method, args) {
 export function getTorrents() {
     return rpcCall('torrent-get', {
         fields: [
-          'id',
-          'name',
-          'percentDone',
-          'dateCreated',
-          'downloadDir',
-          'addedDate',
-          'rateDownload',
-          'rateUpload',
-          'uploadRatio', // uploadedEver / downloadedEver
-          'files',
-          'totalSize',
-          'downloadedEver',
-          'uploadedEver',
-          'hashString',
-          'activityDate',
+            "id",
+            "name",
+            "error",
+            "errorString",
+            "eta",
+            "isFinished",
+            "isStalled",
+            "labels",
+            "leftUntilDone",
+            "metadataPercentComplete",
+            "peersConnected",
+            "peersGettingFromUs",
+            "peersSendingToUs",
+            "percentDone",
+            "queuePosition",
+            "rateDownload",
+            "rateUpload",
+            "recheckProgress",
+            "seedRatioMode",
+            "seedRatioLimit",
+            "sizeWhenDone",
+            "status",
+            "trackers",
+            "downloadDir",
+            "uploadedEver",
+            "uploadRatio",
+            "webseedsSendingToUs"
         ]
     });
 }

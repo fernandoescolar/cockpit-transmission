@@ -12,6 +12,8 @@ import * as transmission from './client';
 import Downloads from './Downloads';
 import Configuration from './Configuration';
 
+const _ = cockpit.gettext;
+
 const Application = () => {
     const [reloadInterval, setReloadInterval] = useState(undefined);
     const [state, setState] = useState({ torrents: [], hasBeenInitialized: false, config: { host: '', port: '', username: '', password: ''} });
