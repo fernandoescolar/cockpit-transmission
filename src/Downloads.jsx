@@ -29,7 +29,7 @@ import { Text, TextVariants } from "@patternfly/react-core/dist/esm/components/T
 
 
 const Downloads = ({ }) => {
-    const [state, _] = useTransmissionContext();
+    const state = useTransmissionContext();
 
 
    return (

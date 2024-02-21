@@ -6,7 +6,7 @@ import { TextInput } from "@patternfly/react-core/dist/esm/components/TextInput"
 import { useTransmissionContext } from './context';
 
 const Configuration = ({ }) => {
-    const [t, _] = useTransmissionContext();
+    const t = useTransmissionContext();
     const [state, setState] = useState(t.config);
     const handleUpdate = () => {
         console.log("Update");
