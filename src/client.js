@@ -1,0 +1,75 @@
+import cockpit from "cockpit";
+
+const SessionHeader = 'X-Transmission-Session-Id';
+const rpcPath = '/transmission/rpc'
+let http = undefined;
+
+export function init(host, port, username, password) {
+    http = cockpit.http({
+        "address": host,
+        "headers": {
+            "Authorization": `Basic ${btoa(`${username}:${password}`)}`,
+        },
+        "port": port
+    });
+}
+
+function getToken() {
+    if (!http) {
+        return Promise.reject('HTTP client is not initialized');
+    }
+
+    return new Promise((resolve, reject) => {
+        let token = '';
+        http.get(rpcPath).response((status, headers) => {
+            token = headers[SessionHeader];
+            resolve(token);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+}
+
+function rpcCall(method, args) {
+    return new Promise((resolve, reject) => {
+        const data = {
+            arguments: args,
+            method,
+        };
+        this.getToken()
+            .then(token => {
+                http.post(rpcPath, data, { [SessionHeader]: token })
+                    .then(response => {
+                        resolve(response);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    })
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+export function getTorrents() {
+    return rpcCall('torrent-get', {
+        fields: [
+          'id',
+          'name',
+          'percentDone',
+          'dateCreated',
+          'downloadDir',
+          'addedDate',
+          'rateDownload',
+          'rateUpload',
+          'uploadRatio', // uploadedEver / downloadedEver
+          'files',
+          'totalSize',
+          'downloadedEver',
+          'uploadedEver',
+          'hashString',
+          'activityDate',
+        ]
+    });
+}

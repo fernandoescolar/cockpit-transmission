@@ -19,32 +19,73 @@
 
 import cockpit from 'cockpit';
 import React from 'react';
-import { Alert } from "@patternfly/react-core/dist/esm/components/Alert/index.js";
-import { Card, CardBody, CardTitle } from "@patternfly/react-core/dist/esm/components/Card/index.js";
+import { Page, PageSection, PageSectionVariants } from "@patternfly/react-core/dist/esm/components/Page";
+import { Alert, AlertActionCloseButton, AlertActionLink, AlertGroup } from "@patternfly/react-core/dist/esm/components/Alert";
+import { Button } from "@patternfly/react-core/dist/esm/components/Button";
+import { Checkbox } from "@patternfly/react-core/dist/esm/components/Checkbox";
+import { EmptyState, EmptyStateHeader, EmptyStateFooter, EmptyStateIcon, EmptyStateActions, EmptyStateVariant } from "@patternfly/react-core/dist/esm/components/EmptyState";
+import { Stack } from "@patternfly/react-core/dist/esm/layouts/Stack";
+import { ExclamationCircleIcon } from '@patternfly/react-icons';
+import { WithTransmissionContext } from './context';
+import * as transmission from './client';
+import Downloads from './Downloads';
+import Configuration from './Configuration';
 
 const _ = cockpit.gettext;
 
 export class Application extends React.Component {
     constructor() {
         super();
-        this.state = { hostname: _("Unknown") };
+        this.reloadInterval = undefined;
+        this.state = {
+            torrents: [],
+            hasBeenInitialized: false,
+            config: {
+                host: '',
+                port: '',
+                username: '',
+                password: '',
+            },
+        };
 
-        cockpit.file('/etc/hostname').watch(content => {
-            this.setState({ hostname: content.trim() });
+        cockpit.file('~/.cockpit-transmission').watch(content => {
+            if (!content) {
+                return;
+            }
+
+            var config = JSON.parse(content);
+            if (config.host === '' || config.port === '' || config.username === '' || config.password === '') {
+                return;
+            }
+
+            transmission.init(config.host, config.port, config.username, config.password);
+            this.setState({  torrents: [], hasBeenInitialized: true, config: config});
+            if (this.reloadInterval) {
+                clearInterval(this.reloadInterval);
+            }
+
+            this.reloadInterval = setInterval(() => {
+                transmission.getTorrents().then(response => {
+                    this.setState({ ...this.state, torrents: response.arguments.torrents });
+                });
+            }, 10000);
         });
     }
 
     render() {
         return (
-            <Card>
-                <CardTitle>Starter Kit</CardTitle>
-                <CardBody>
-                    <Alert
-                        variant="info"
-                        title={ cockpit.format(_("Running on $0"), this.state.hostname) }
-                    />
-                </CardBody>
-            </Card>
+            <WithTransmissionContext value={this.state}>
+                <Page id="transmission" key="transmission">
+                    <PageSection className="content-filter" padding={{ default: 'noPadding' }} variant={PageSectionVariants.light}>
+                    </PageSection>
+                    <PageSection className='ct-pagesection-mobile'>
+                        <Stack hasGutter>
+                            { this.state.hasBeenInitialized ? (<Downloads />) : (<Configuration />) }
+                        </Stack>
+                    </PageSection>
+                </Page>
+            </WithTransmissionContext>
         );
     }
 }
+
