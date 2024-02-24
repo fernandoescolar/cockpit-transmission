@@ -51,7 +51,7 @@ const Application = () => {
         reload();
         setReloadInterval(setInterval(() => {
             reload();
-        }, 10000));
+        }, 5000));
     };
 
     useEffect(() => {

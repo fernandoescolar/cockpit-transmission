@@ -27,10 +27,42 @@ p {
             background: transparent;
         }
     }
+    .pf-v5-c-icon {
+        margin-right: .5em;
+    }
+    .pf-m-align-right {
+        float: right;
+    }
     .separator {
-        margin-bottom: 1em;
-        margin-top: 1em;
-        background-color: #e3e3e3 !important;
-        height: 1px !important;
+        padding-bottom: 1em;
+        padding-top: 1em;
+        padding-left: 1em;
+        border-bottom: 1px solid #e3e3e3 !important;
+
+        &.stopped {
+            background-color: #f1f1f1;
+            color: #939393;
+
+            .pf-v5-c-progress__indicator {
+                background-color: #0000FF01;
+            }
+
+            .pf-m-info {
+                color: rgba(0, 102, 204, 0.409);
+            }
+            .pf-m-success {
+                .pf-v5-c-progress__indicator {
+                    background-color: #00ffff1a;
+                }
+            }
+
+            .pf-m-success {
+                color: #3e86355d;
+            }
+
+        }
+    }
+    .error {
+        color: red;
     }
 }
