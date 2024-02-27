@@ -7,7 +7,7 @@ import { SearchInput } from '@patternfly/react-core';
 import { DownloadsActions } from './DownloadsActions';
 import { _ } from './utils';
 
-export const Filters = ({ filter, handleFilterChanged, handleAddTorrent }) => {
+export const DownloadsFilters = ({ filter, handleFilterChanged, handleAddTorrent }) => {
     return (
         <Toolbar>
             <ToolbarContent>

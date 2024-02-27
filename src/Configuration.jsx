@@ -5,8 +5,8 @@ import { TextInput } from "@patternfly/react-core/dist/esm/components/TextInput"
 import { useTransmissionContext } from './context';
 
 const Configuration = ({ handleUpdate }) => {
-    const t = useTransmissionContext();
-    const [state, setState] = useState(t.config);
+    const context = useTransmissionContext();
+    const [state, setState] = useState(context.state.config);
     return (
         <>
         <Form isHorizontal>

@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
 import { Dropdown, DropdownItem, KebabToggle } from '@patternfly/react-core/dist/esm/deprecated/components/Dropdown/index.js';
 import { Divider } from "@patternfly/react-core/dist/esm/components/Divider";
-import { Statuses, _ } from './utils';
-import * as transmission from '../client';
+import { Statuses, _ } from '../utils';
+import { useTransmissionContext } from '../../context';
 
 export const DownloadActions = ({ torrent }) => {
+    const { actions } = useTransmissionContext();
     const [isActionsKebabOpen, setIsActionsKebabOpen] = useState(false);
     const handleDetails = () => {
-        console.log("Details");
+        console.log(torrent);
         setIsActionsKebabOpen(false);
     };
     const handleStop = () => {
-        transmission.stopTorrent(torrent.id).then(() => {
+        actions.stop(torrent).then(() => {
             setIsActionsKebabOpen(false);
         });
     };
     const handleStart = () => {
-        transmission.startTorrent(torrent.id).then(() => {
+        actions.start(torrent).then(() => {
             setIsActionsKebabOpen(false);
         });
     };
     const handleStartNow = () => {
-        transmission.startTorrentNow(torrent.id).then(() => {
+        actions.startNow(torrent).then(() => {
             setIsActionsKebabOpen(false);
         });
     };
@@ -40,7 +41,7 @@ export const DownloadActions = ({ torrent }) => {
         // });
     };
     const handleVerify = () => {
-        transmission.verifyTorrent(torrent.id).then(() => {
+        actions.verify(torrent).then(() => {
             setIsActionsKebabOpen(false);
         });
     };
@@ -53,7 +54,7 @@ export const DownloadActions = ({ torrent }) => {
         setIsActionsKebabOpen(false);
     };
     const handleReannounce = () => {
-        transmission.reannounceTorrent(torrent.id).then(() => {
+        actions.reannounce(torrent).then(() => {
             setIsActionsKebabOpen(false);
         });
     };

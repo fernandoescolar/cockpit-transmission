@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text } from "@patternfly/react-core/dist/esm/components/Text";
-import { Statuses, fileSize, timeRemaining } from './utils';
+import { Statuses, fileSize, timeRemaining } from '../utils';
 
-export const DownloadState = ({ torrent }) => {
+export const DownloadRatios = ({ torrent }) => {
     if (torrent.status <= Statuses.Check) {
         return (
             <Text component='small'>

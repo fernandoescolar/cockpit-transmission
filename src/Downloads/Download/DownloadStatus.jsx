@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from "@patternfly/react-core/dist/esm/components/Text";
-import { fileSize, Statuses } from './utils';
+import { fileSize, Statuses } from '../utils';
 
 export const DownloadStatus = ({ torrent }) => {
     if (torrent.errorString) {

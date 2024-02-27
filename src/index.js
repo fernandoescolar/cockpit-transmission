@@ -23,8 +23,9 @@ import "patternfly/patternfly-5-cockpit.scss";
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Application } from './app.jsx';
+import { WithTransmissionContext } from './context';
 import './app.scss';
 
 document.addEventListener("DOMContentLoaded", () => {
-    createRoot(document.getElementById("app")).render(<Application />);
+    createRoot(document.getElementById("app")).render(<WithTransmissionContext><Application /></WithTransmissionContext>);
 });

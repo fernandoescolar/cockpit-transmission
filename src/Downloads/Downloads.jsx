@@ -4,8 +4,8 @@ import { Flex } from "@patternfly/react-core/dist/esm/layouts/Flex";
 import { Text, TextVariants } from "@patternfly/react-core/dist/esm/components/Text";
 import { Stack } from '@patternfly/react-core';
 import { useTransmissionContext } from '../context';
-import { Filters } from './Filters';
-import { Download } from './Download';
+import { DownloadsFilters } from './DownloadsFilters';
+import { Download } from './Download/Download';
 import { _ } from './utils';
 
 const sanitize = (text) => {
@@ -17,7 +17,7 @@ const sanitize = (text) => {
 };
 
 export const Downloads = () => {
-    const state = useTransmissionContext();
+    const { state } = useTransmissionContext();
     const [rows, setRows] = useState([]);
     const [filter, setFilter] = useState({ state: 'all', search: '' });
     useEffect(() => {
@@ -46,7 +46,7 @@ export const Downloads = () => {
 
     return (
         <Card id="transmission">
-            <CardHeader actions={{ actions: (<Filters filter={filter} handleFilterChanged={filter => setFilter(filter)} handleAddTorrent={() => { }} />) }}>
+            <CardHeader actions={{ actions: (<DownloadsFilters filter={filter} handleFilterChanged={filter => setFilter(filter)} handleAddTorrent={() => { }} />) }}>
                 <Flex flexWrap={{ default: 'nowrap' }} className="pf-v5-u-w-100">
                     <CardTitle>
                         <Text component={TextVariants.h1} className="containers-images-title">{_("Trasnmission")}</Text>
