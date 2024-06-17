@@ -26,7 +26,7 @@ export const Application = () => {
         actions.init(config);
     };
     const handleUpdate = ({ host, port, username, password }) => {
-        file.replace(state.config);
+        file.replace({ host, port, username, password });
     };
 
     useEffect(() => {
